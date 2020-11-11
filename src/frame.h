@@ -70,6 +70,7 @@ enum internal_border_part
 enum ns_appearance_type
   {
    ns_appearance_aqua,
+   ns_appearance_dark_aqua,
    ns_appearance_vibrant_dark
   };
 #endif

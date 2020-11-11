@@ -1269,10 +1269,19 @@ DEFUN ("x-create-frame", Fx_create_frame, Sx_create_frame,
   store_frame_param (f, Qundecorated, FRAME_UNDECORATED (f) ? Qt : Qnil);
 
 #ifdef NS_IMPL_COCOA
+#ifndef NSAppKitVersionNumber10_14
+#define NSAppKitVersionNumber10_14 1671
+#endif
   tem = gui_display_get_arg (dpyinfo, parms, Qns_appearance, NULL, NULL,
                              RES_TYPE_SYMBOL);
-  FRAME_NS_APPEARANCE (f) = EQ (tem, Qdark)
-    ? ns_appearance_vibrant_dark : ns_appearance_aqua;
+
+  if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_14)
+    FRAME_NS_APPEARANCE(f) =
+      EQ(tem, Qdark) ? ns_appearance_dark_aqua : ns_appearance_aqua;
+  else
+    FRAME_NS_APPEARANCE(f) =
+      EQ(tem, Qdark) ? ns_appearance_vibrant_dark : ns_appearance_aqua;
+
   store_frame_param (f, Qns_appearance, tem);
 
   tem = gui_display_get_arg (dpyinfo, parms, Qns_transparent_titlebar,
